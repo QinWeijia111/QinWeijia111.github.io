@@ -10,3 +10,4 @@ test-results/
 .lighthouseci/
 public/resume/*.pdf
 public/videos/*.mp4
+!public/videos/newrevit-pirevit-demo.mp4

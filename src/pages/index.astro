@@ -1,0 +1,208 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { profile, focusAreas } from '../data/profile';
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Layout>
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <div class="hero-meta">
+      <span class="status-dot" aria-hidden="true"></span> AGENT SYSTEMS ·
+      工程实践与源码研究
+    </div>
+    <div class="hero-grid">
+      <div>
+        <p class="hero-name">
+          {profile.name} <span>/ {profile.romanizedName}</span>
+        </p>
+        <h1 id="hero-title">
+          构建可靠的
+          <br />
+          <span>Agent 系统。</span>
+        </h1>
+        <p class="hero-statement">{profile.statement}</p>
+        <p class="hero-position">{profile.title}</p>
+        <p class="hero-education">
+          计算机科学与技术 · 硕士在读
+          <br />
+          哈尔滨工程大学
+        </p>
+        <div class="hero-actions flex flex-wrap gap-3">
+          <a class="button primary" href="#projects">
+            查看项目 <span aria-hidden="true">↘</span>
+          </a>
+          <a
+            class="button secondary"
+            href={`mailto:${profile.email}?subject=Resume%20request`}
+          >
+            邮件索取简历 <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <div class="hero-socials flex gap-6">
+          <a href={profile.github}>GitHub ↗</a>
+          <a href={`mailto:${profile.email}`}>邮件联系 ↗</a>
+        </div>
+      </div>
+      <aside class="system-note" aria-label="工程理念：从意图到验证">
+        <div class="note-top">
+          <span>从真实需求到可靠结果</span>
+          <span aria-hidden="true">↗</span>
+        </div>
+        <div class="loop-step">
+          <span>01</span>
+          <strong>理解真实意图</strong>
+          <small>真实需求 / 领域上下文</small>
+        </div>
+        <div class="loop-step">
+          <span>02</span>
+          <strong>通过工具执行</strong>
+          <small>Tools / Skills / Runtime</small>
+        </div>
+        <div class="loop-step">
+          <span>03</span>
+          <strong>验证执行结果</strong>
+          <small>HITL / Evaluation / Feedback</small>
+        </div>
+        <div class="note-bottom">
+          <span class="status-dot" aria-hidden="true"></span>{' '}
+          让可靠性成为设计的一部分。
+        </div>
+      </aside>
+    </div>
+    <div class="hero-bottom">
+      <span>从真实问题出发，交付可用系统</span>
+      <a href="#projects">浏览代表项目 ↓</a>
+    </div>
+  </section>
+  <section
+    class="section wrap about-grid"
+    id="about"
+    aria-labelledby="about-title"
+  >
+    <div>
+      <p class="eyebrow">01 / 关于我</p>
+      <h2 id="about-title">
+        让 Agent 走进
+        <br />
+        真实工作流。
+      </h2>
+    </div>
+    <div class="about-copy">
+      <p class="lead">
+        我关注 Agent
+        Systems：把模型、工具、运行时和人的判断，连接成能在真实软件中工作的系统。
+      </p>
+      <p>
+        目前在哈尔滨工程大学攻读计算机科学与技术硕士。围绕 BIM 自动化，我从 0 到
+        1 构建了 NewRevit 与 PiRevit，持续实践工具能力、领域
+        Skills、运行时集成与工程验证。
+      </p>
+      <p>
+        我也通过 Multica Learning 开展源码可验证的 Agent Runtime
+        研究，把理解系统的过程沉淀为公开内容和可复用的协作流程。
+      </p>
+      <a class="text-link" href="#contact">
+        寻找 Agent Engineer / Agent 算法 / LLM 应用算法实习 →
+      </a>
+    </div>
+  </section>
+  <section
+    class="section projects-section"
+    id="projects"
+    aria-labelledby="projects-title"
+  >
+    <div class="wrap">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">02 / 代表项目</p>
+          <h2 id="projects-title">构建、验证、持续迭代。</h2>
+        </div>
+        <p>
+          三个持续维护的项目。
+          <br />
+          从领域能力，到桌面产品，再到源码研究。
+        </p>
+      </div>
+      <div class="project-list">
+        {projects.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="section wrap" id="focus" aria-labelledby="focus-title">
+    <p class="eyebrow">03 / 关注方向</p>
+    <h2 id="focus-title">关注 Agent 背后的系统工程。</h2>
+    <div class="focus-grid">
+      {focusAreas.map((area) => (
+        <article>
+          <span class="focus-number">{area.number}</span>
+          <h3>{area.title}</h3>
+          <p>{area.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+  <section class="section wrap background-grid">
+    <div id="education">
+      <p class="eyebrow">04 / 教育背景</p>
+      <h2>持续学习，深入实践。</h2>
+      <div class="education-list">
+        {profile.education.map((item) => (
+          <article>
+            <p class="education-date">{item.date}</p>
+            <h3>{item.institution}</h3>
+            <p>{item.degree}</p>
+            <small>{item.note}</small>
+          </article>
+        ))}
+      </div>
+    </div>
+    <div id="honors">
+      <p class="eyebrow">05 / 荣誉与经历</p>
+      <h2>代码之外。</h2>
+      <ul class="honors-list">
+        {profile.honors.map((honor) => (
+          <li>
+            <span aria-hidden="true">↗</span>
+            {honor}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <section class="contact-section" id="contact" aria-labelledby="contact-title">
+    <div class="wrap">
+      <p class="eyebrow">06 / 联系我</p>
+      <h2 id="contact-title">
+        一起构建
+        <br />
+        <span>真正可用的系统。</span>
+      </h2>
+      <p>
+        欢迎交流 Agent Systems、工程实践与实习机会。
+        <br />
+        简历可通过邮件联系获取。
+      </p>
+      <a class="contact-email" href={`mailto:${profile.email}`}>
+        {profile.email} <span aria-hidden="true">↗</span>
+      </a>
+      <div class="flex gap-6">
+        <a href={profile.github}>GitHub ↗</a>
+        <a
+          href={
+            projects
+              .flatMap((project) => project.data.links)
+              .find((link) => link.url.includes('.github.io/'))?.url
+          }
+        >
+          研究笔记 ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
