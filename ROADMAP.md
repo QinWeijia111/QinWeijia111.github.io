@@ -18,7 +18,15 @@ This file tracks remaining work and future improvements; architecture and polici
 
 - [x] Owner authorizes the supplied joint demo for public viewing.
 - [x] Add approved compressed full demo and Chinese scene guide to both project pages.
-- [ ] Re-run video playback checks on the actual approved media.
+- [x] Re-run video playback checks on the actual approved media.
 - [ ] Add only new owner-confirmed project results, preserving evidence scope.
 
 Public resume hosting is intentionally excluded by the owner. It is not an implementation backlog item.
+
+## PR #1 readability / narrative review
+
+- [x] Raise typography, constrain prose width, keep the current design language.
+- [x] Expand three narratives, connect engineering projects, add module links and demo guidance.
+- [x] Provide Desktop/Mobile screenshots for human review.
+- [ ] Human final review of revised copy, visual layout and screenshots.
+- [ ] Separately approve any future real-demo screenshot poster.

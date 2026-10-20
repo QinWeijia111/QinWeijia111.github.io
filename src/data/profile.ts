@@ -5,6 +5,7 @@ export const profile = {
   title: 'Agent 工程师 / Agent 系统方向',
   email: 'qwj25811125112@163.com',
   github: 'https://github.com/QinWeijia111',
+  researchSite: 'https://qinweijia111.github.io/multica-learning/',
   statement: 'Building reliable Agent systems for real-world software.',
   description:
     '秦维嘉的个人技术主页。计算机科学与技术硕士生，关注 Agent Systems、可靠工具执行、Runtime、HITL 与工程评测。',

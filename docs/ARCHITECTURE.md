@@ -8,9 +8,9 @@ Markdown project files → Astro Content Collection + Zod schema → typed cards
 
 ## Presentation
 
-`Layout.astro` supplies metadata, canonical links, social image, semantic navigation and footer. `ProjectCard.astro` renders selected work. `[id].astro` statically enumerates collection entries. `Demo.astro` renders either a clear review notice or an approved native video player; a source cannot be assigned to an unapproved demo. MDX is available without adding a client framework.
+`Layout.astro` supplies metadata, canonical links, social image, semantic navigation and footer. `ProjectCard.astro` renders selected work. `ProjectSection.astro` renders schema-driven narrative cards and ordered workflow steps. Project references are typed collection references; previous/next navigation follows collection order. Demo stages and optional future approved posters live in the same Markdown metadata. `[id].astro` statically enumerates collection entries. `Demo.astro` renders either a clear review notice or an approved native video player; a source cannot be assigned to an unapproved demo. MDX is available without adding a client framework.
 
-Tailwind v4 is integrated through its Vite plugin. Small composition utilities work alongside the token-based shared stylesheet. System fonts avoid network fonts and late layout shifts. A monochrome/warm-gray system with forest-green accent supports readable light/dark themes. Original SVG concept diagrams expose no customer data.
+Tailwind v4 is integrated through its Vite plugin. Prose is capped at 780px inside the 960px detail layout; media and flows retain full width. Supporting text is at least 12px and Chinese headings use relaxed letter spacing. Small composition utilities work alongside the token-based shared stylesheet. System fonts avoid network fonts and late layout shifts. A monochrome/warm-gray system with forest-green accent supports readable light/dark themes. Original SVG concept diagrams expose no customer data.
 
 ## Client runtime
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## PR #1 review revision — 2026-10-20 — pending human review
+
+- Raise body/card/meta type sizes; use system fonts and looser Chinese heading spacing.
+- Limit narrative prose to 780px while preserving full-width demos, results and flow cards.
+- Expand all three project narratives with source-owned workflows, scenarios and research modules.
+- Add reciprocal project references, sequential reading links and five-stage demo guides.
+- Configure the research site explicitly; keep unreviewed real screenshot posters deferred.
+- Add Desktop/Mobile review screenshots and extend existing tests for readability and navigation.
+
 ## 1.0.0 — 2026-10-20 — pending human merge
 
 - Create a Chinese-first static portfolio focused on Agent Systems engineering.

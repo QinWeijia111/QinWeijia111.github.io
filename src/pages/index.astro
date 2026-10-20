@@ -193,15 +193,7 @@ const projects = (await getCollection('projects')).sort(
       </a>
       <div class="flex gap-6">
         <a href={profile.github}>GitHub ↗</a>
-        <a
-          href={
-            projects
-              .flatMap((project) => project.data.links)
-              .find((link) => link.url.includes('.github.io/'))?.url
-          }
-        >
-          研究笔记 ↗
-        </a>
+        <a href={profile.researchSite}>研究笔记 ↗</a>
       </div>
     </div>
   </section>

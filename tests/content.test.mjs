@@ -24,8 +24,9 @@ test('exactly three owned projects with distinct ordering and complete public se
   ]);
   assert.equal(new Set(list.map((p) => p.data.order)).size, 3);
   for (const { raw, data } of list) {
-    for (const heading of ['项目概述', '真实问题', '我构建了什么'])
-      assert(raw.includes(`## ${heading}`));
+    assert(raw.includes('## 项目概述'));
+    assert((raw.match(/^## /gm) ?? []).length >= 3);
+    assert(data.detailSections.length >= 2);
     assert(data.myRole.length > 30);
     assert(data.posterAlt.length > 30);
     for (const link of data.links)
@@ -57,4 +58,29 @@ test('owner forbids public resume files and raw implementation material', async 
   for (const { raw } of await projects()) {
     assert(!/\/Users\/|[A-Z]:\\|tool_schema|system_prompt|客户名称/i.test(raw));
   }
+});
+
+test('related engineering projects are reciprocal and six research chapters are linked', async () => {
+  const list = await projects();
+  const byId = Object.fromEntries(list.map((p) => [p.id, p]));
+  for (const { id, data } of list.filter((p) => p.data.crossProject)) {
+    const related = byId[data.crossProject.project];
+    assert(related, 'Related project must exist');
+    assert.equal(related.data.crossProject.project, id);
+    assert.equal(data.demo.stages.length, 5);
+  }
+  const modules = byId['multica-learning'].data.detailSections
+    .flatMap((section) => section.items)
+    .filter((item) => item.label);
+  assert.deepEqual(
+    modules.map((item) => item.label),
+    ['M01', 'M02', 'M03', 'M04', 'M05', 'M06'],
+  );
+  assert(
+    modules.every((item) =>
+      item.url.startsWith(
+        'https://qinweijia111.github.io/multica-learning/learn/',
+      ),
+    ),
+  );
 });

@@ -4,6 +4,7 @@ for (const viewport of [
   { width: 1440, height: 1000 },
   { width: 768, height: 1024 },
   { width: 390, height: 844 },
+  { width: 320, height: 812 },
 ]) {
   for (const theme of ['light', 'dark'] as const) {
     test(`${viewport.width}px / ${theme}: layout, accessibility, navigation`, async ({
@@ -22,6 +23,19 @@ for (const viewport of [
           () => document.documentElement.scrollWidth <= window.innerWidth,
         ),
       ).toBeTruthy();
+      const unreadable = await page
+        .locator('p, small, nav a, dt, dd, li, span')
+        .evaluateAll((nodes) =>
+          nodes
+            .filter(
+              (node) =>
+                node.getClientRects().length &&
+                node.textContent?.trim() &&
+                parseFloat(getComputedStyle(node).fontSize) < 12,
+            )
+            .map((node) => node.textContent),
+        );
+      expect(unreadable).toEqual([]);
       expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
       await page.locator('#contact').scrollIntoViewIfNeeded();
       await page.locator('h1').scrollIntoViewIfNeeded();
@@ -40,6 +54,24 @@ for (const viewport of [
             () => document.documentElement.scrollWidth <= window.innerWidth,
           ),
         ).toBeTruthy();
+        expect(
+          await page
+            .locator('.detail-content')
+            .evaluate((el) => el.getBoundingClientRect().width),
+        ).toBeLessThanOrEqual(780);
+        const smallText = await page
+          .locator('p, small, nav a, dt, dd, li, span')
+          .evaluateAll((nodes) =>
+            nodes
+              .filter(
+                (node) =>
+                  node.getClientRects().length &&
+                  node.textContent?.trim() &&
+                  parseFloat(getComputedStyle(node).fontSize) < 12,
+              )
+              .map((node) => node.textContent),
+          );
+        expect(smallText).toEqual([]);
         expect((await new AxeBuilder({ page }).analyze()).violations).toEqual(
           [],
         );
@@ -47,12 +79,19 @@ for (const viewport of [
           await expect(
             page.getByRole('heading', { name: '项目演示' }),
           ).toBeVisible();
+          await expect(page.locator('.demo-guide li')).toHaveCount(5);
+          await expect(page.locator('.cross-project a')).toHaveAttribute(
+            'href',
+            slug === 'newrevit' ? '/projects/pirevit/' : '/projects/newrevit/',
+          );
           await expect(page.locator('video')).toHaveCount(1);
           await expect(page.locator('video')).toHaveAttribute(
             'preload',
             'metadata',
           );
         }
+        await page.locator('.project-pagination').scrollIntoViewIfNeeded();
+        await page.locator('h1').scrollIntoViewIfNeeded();
         await page.screenshot({
           path: `test-results/${slug}-${viewport.width}-${theme}.png`,
           fullPage: true,
@@ -124,4 +163,19 @@ test('approved joint video loads, plays and seeks with Chinese scene guide', asy
     )
     .toBeGreaterThan(0);
   await expect(page.locator('video[autoplay]')).toHaveCount(0);
+});
+
+test('project relationships and sequential reading links navigate correctly', async ({
+  page,
+}) => {
+  await page.goto('/projects/newrevit/');
+  await page.getByRole('link', { name: '查看 PiRevit →' }).click();
+  await expect(page).toHaveURL('/projects/pirevit/');
+  await page.getByRole('link', { name: '查看 NewRevit →' }).click();
+  await expect(page).toHaveURL('/projects/newrevit/');
+  await page.locator('.project-pagination a').last().click();
+  await expect(page).toHaveURL('/projects/pirevit/');
+  await page.locator('.project-pagination a').last().click();
+  await expect(page).toHaveURL('/projects/multica-learning/');
+  await expect(page.locator('.narrative-cards a')).toHaveCount(6);
 });

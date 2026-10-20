@@ -1,6 +1,22 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
+
+const detailSection = z.object({
+  heading: z.string(),
+  description: z.string().optional(),
+  layout: z.enum(['flow', 'cards']),
+  items: z
+    .array(
+      z.object({
+        label: z.string().optional(),
+        title: z.string(),
+        description: z.string().optional(),
+        url: z.url().optional(),
+      }),
+    )
+    .min(1),
+});
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
@@ -15,6 +31,15 @@ const projects = defineCollection({
     status: z.string(),
     poster: z.string().startsWith('/images/'),
     posterAlt: z.string(),
+    detailSections: z.array(detailSection).default([]),
+    evolution: detailSection.optional(),
+    crossProject: z
+      .object({
+        project: reference('projects'),
+        heading: z.string(),
+        description: z.string(),
+      })
+      .optional(),
     technologies: z.array(z.string()),
     highlights: z.array(z.string()),
     metrics: z
@@ -28,6 +53,8 @@ const projects = defineCollection({
         note: z.string(),
         src: z.string().startsWith('/videos/').optional(),
         captions: z.string().startsWith('/videos/').optional(),
+        stages: z.array(z.string()).optional(),
+        poster: z.string().startsWith('/images/').optional(),
       })
       .refine(
         (demo) =>

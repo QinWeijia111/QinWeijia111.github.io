@@ -18,10 +18,23 @@ const {
       <p class="muted">
         {data.demo.note} 视频无音轨，可通过画面字幕与中文阶段说明观看。
       </p>
+      {data.demo.stages && (
+        <div class="demo-guide">
+          <h3>演示中可以看到</h3>
+          <ol>
+            {data.demo.stages.map((stage, index) => (
+              <li>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                {stage}
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
       <video
         controls
         preload="metadata"
-        poster={data.poster}
+        poster={data.demo.poster ?? data.poster}
         width="1280"
         height="720"
         aria-label={`${data.title} 演示视频`}
