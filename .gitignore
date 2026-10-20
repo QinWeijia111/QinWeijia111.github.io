@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.env*
+!.env.example
+.review/
+playwright-report/
+test-results/
+.lighthouseci/
+public/resume/*.pdf
+public/videos/*.mp4
