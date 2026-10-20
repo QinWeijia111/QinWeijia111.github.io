@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://qinweijia111.github.io/sitemap-index.xml
