@@ -18,6 +18,13 @@ const detailSection = z.object({
     .min(1),
 });
 
+const architectureDiagram = z.object({
+  src: z.string().startsWith('/images/'),
+  alt: z.string(),
+  title: z.string(),
+  description: z.string(),
+});
+
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
   schema: z.object({
@@ -67,6 +74,7 @@ const projects = defineCollection({
     links: z.array(z.object({ label: z.string(), url: z.url() })),
     architecture: z.array(z.string()).optional(),
     architectureNote: z.string().optional(),
+    architectureDiagrams: z.array(architectureDiagram).default([]),
     resultNote: z.string(),
   }),
 });
