@@ -38,14 +38,10 @@ architecture:
   - Revit
 architectureNote: Pi 提供 Agent Core；PiRevit 负责运行时集成、桌面交互、可观测性和产品化。
 architectureDiagrams:
-  - src: /images/pirevit-runtime-message-flow.svg
-    alt: PiRevit Runtime 与消息流架构图，展示 React 前端、Tauri Rust 后端、Pi RPC Runtime、NewRevit MCP 与 Revit 之间的命令路径和事件路径。
-    title: Runtime 与消息流：命令向下，事件向上
-    description: 前端通过 Tauri invoke 将命令交给 Rust，PiProcessManager 再经 stdin JSONL 驱动 Pi；Pi 的流式文本、Tool、HITL 与 Session 事件从 stdout 返回，经 JSONL 解码和 AgentEvent 归一化后驱动前端状态。这里采用轻量事件桥，不使用 Kafka / RabbitMQ。
-  - src: /images/pirevit-fake-pi-startup.svg
-    alt: PiRevit fake Pi Integration 与 Runtime Startup 架构图，左侧展示测试替身通过真实子进程 Pipe JSONL 验证协议，右侧展示 PiProcessManager 的启动、generation 隔离、握手和 Ready 判定。
-    title: fake-Pi Integration 与 Runtime Startup
-    description: fake Pi 是一个进程级测试替身：它不调用真实模型、MCP 或 Revit，但会真实经过子进程、stdin/stdout Pipe 与 JSONL 协议，用来验证流分片、事件序列和 HITL requestId 关联。正式启动时，PiProcessManager 还会完成依赖发现、generation 隔离、reader thread 建立和启动握手，只有会话状态与必要能力验证通过后才进入 Ready。
+  - src: /images/pirevit-system-architecture.svg
+    alt: PiRevit 整体系统架构图，展示桌面交互层、AgentService 前端应用层、Rust PiProcessManager、Pi Agent Runtime、NewRevit MCP 与 Revit 执行层，以及 HITL、Session、Trace、Provider 与交付能力。
+    title: PiRevit 整体系统架构
+    description: PiRevit 将桌面产品、Runtime 管理与 BIM 领域能力分层：React/Tauri 负责工程师交互，AgentService 与状态层隔离 Pi 原始协议，Rust PiProcessManager 管理独立 Pi 进程、JSONL IPC、运行状态与启动握手；Pi 提供 Agent Core，并通过 MCP Adapter 消费 NewRevit 的 Tool 与 Skills，最终由 Revit Add-in 调用 Revit API 完成真实工程操作。HITL、Session、Trace、Provider 兼容性和私有 Runtime 共同构成产品化与交付能力。
 links: []
 myRole: 负责运行时集成、桌面交互、可观测性与 Windows 产品化。Pi 提供 Agent Core；我的工作重点是将它与领域能力及产品体验连接起来。
 resultNote: 从 Agent 能力到桌面交互与 Windows 交付，形成完整的产品工程实践；运行时核心使用 Pi，不声称自研 Pi Agent Core。
