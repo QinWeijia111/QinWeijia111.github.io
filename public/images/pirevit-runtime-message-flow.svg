@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">PiRevit Runtime 与消息流</title>
+  <desc id="desc">展示 React 前端、Tauri Rust 后端、Pi RPC Runtime、NewRevit MCP 与 Revit 之间的命令路径、事件路径和通信机制。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#35604a"/></marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#456f9d"/></marker>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#745d91"/></marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#1d2b24" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="1440" height="900" fill="#f5f5f0"/>
+  <rect x="40" y="34" width="1360" height="104" rx="18" fill="#202a26"/>
+  <text x="72" y="82" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="30" font-weight="700" fill="#f7f8f3">PiRevit Runtime / Message Flow</text>
+  <text x="72" y="116" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" fill="#cdd7d0">命令向下、事件向上：Desktop 负责 Runtime 集成与可观测性，Pi 提供 Agent Core</text>
+
+  <!-- lanes -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="166" width="318" height="620" rx="18" fill="#eef4f9" stroke="#b9ccdd"/>
+    <rect x="378" y="166" width="318" height="620" rx="18" fill="#f7f0e5" stroke="#dbc8a8"/>
+    <rect x="716" y="166" width="318" height="620" rx="18" fill="#f2eef7" stroke="#cdbfda"/>
+    <rect x="1054" y="166" width="346" height="620" rx="18" fill="#edf4ef" stroke="#b9ceb9"/>
+  </g>
+
+  <text x="64" y="205" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" font-weight="700" fill="#2f5274">01 · React Frontend</text>
+  <text x="402" y="205" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" font-weight="700" fill="#7a5b2c">02 · Tauri / Rust Backend</text>
+  <text x="740" y="205" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" font-weight="700" fill="#5f4a78">03 · Pi RPC Runtime</text>
+  <text x="1078" y="205" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" font-weight="700" fill="#35604a">04 · BIM Execution</text>
+
+  <!-- frontend boxes -->
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif">
+    <rect x="64" y="238" width="270" height="74" rx="12" fill="#fff" stroke="#b9ccdd"/><text x="84" y="268" font-size="17" font-weight="700" fill="#202a26">View</text><text x="84" y="294" font-size="14" fill="#5d6660">输入、Tool Activity、HITL、Session</text>
+    <rect x="64" y="330" width="270" height="74" rx="12" fill="#fff" stroke="#b9ccdd"/><text x="84" y="360" font-size="17" font-weight="700" fill="#202a26">Controller / Hook</text><text x="84" y="386" font-size="14" fill="#5d6660">组织提交、中断、会话与 UI 状态</text>
+    <rect x="64" y="422" width="270" height="88" rx="12" fill="#fff" stroke="#b9ccdd"/><text x="84" y="452" font-size="17" font-weight="700" fill="#202a26">AgentService + Event Normalizer</text><text x="84" y="478" font-size="14" fill="#5d6660">隔离 Pi 原始协议</text><text x="84" y="499" font-size="14" fill="#5d6660">Raw Event → Application Event</text>
+    <rect x="64" y="528" width="270" height="74" rx="12" fill="#fff" stroke="#b9ccdd"/><text x="84" y="558" font-size="17" font-weight="700" fill="#202a26">Reducer / Application State</text><text x="84" y="584" font-size="14" fill="#5d6660">idle / running / waiting / error</text>
+    <rect x="64" y="620" width="270" height="74" rx="12" fill="#fff" stroke="#b9ccdd"/><text x="84" y="650" font-size="17" font-weight="700" fill="#202a26">Runtime Adapter</text><text x="84" y="676" font-size="14" fill="#5d6660">Tauri invoke / listen</text>
+  </g>
+
+  <!-- backend boxes -->
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif">
+    <rect x="402" y="238" width="270" height="74" rx="12" fill="#fff" stroke="#dbc8a8"/><text x="422" y="268" font-size="17" font-weight="700" fill="#202a26">Tauri Command API</text><text x="422" y="294" font-size="14" fill="#5d6660">接收 Desktop 命令并进入 Rust</text>
+    <rect x="402" y="330" width="270" height="96" rx="12" fill="#fff" stroke="#dbc8a8"/><text x="422" y="360" font-size="17" font-weight="700" fill="#202a26">PiProcessManager</text><text x="422" y="386" font-size="14" fill="#5d6660">生命周期 · 状态 · Session · HITL</text><text x="422" y="407" font-size="14" fill="#5d6660">generation 隔离旧进程事件</text>
+    <rect x="402" y="444" width="270" height="88" rx="12" fill="#fff" stroke="#dbc8a8"/><text x="422" y="474" font-size="17" font-weight="700" fill="#202a26">Protocol / Transport</text><text x="422" y="500" font-size="14" fill="#5d6660">stdin / stdout / stderr Pipe</text><text x="422" y="521" font-size="14" fill="#5d6660">JSONL framing + decoder</text>
+    <rect x="402" y="550" width="270" height="104" rx="12" fill="#fff" stroke="#dbc8a8"/><text x="422" y="580" font-size="17" font-weight="700" fill="#202a26">Infrastructure</text><text x="422" y="606" font-size="14" fill="#5d6660">Runtime discovery · model config</text><text x="422" y="627" font-size="14" fill="#5d6660">session store · diagnostics · health</text>
+  </g>
+
+  <!-- pi boxes -->
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif">
+    <rect x="740" y="238" width="270" height="88" rx="12" fill="#fff" stroke="#cdbfda"/><text x="760" y="268" font-size="17" font-weight="700" fill="#202a26">Pi Agent Core</text><text x="760" y="294" font-size="14" fill="#5d6660">Agent Loop · Model · Tool Calling</text><text x="760" y="315" font-size="13" fill="#745d91">由 Pi 提供，不属于 PiRevit 自研 Core</text>
+    <rect x="740" y="344" width="270" height="88" rx="12" fill="#fff" stroke="#cdbfda"/><text x="760" y="374" font-size="17" font-weight="700" fill="#202a26">Skills / Extensions</text><text x="760" y="400" font-size="14" fill="#5d6660">领域 Skills · Human Input Extension</text><text x="760" y="421" font-size="14" fill="#5d6660">MCP Adapter</text>
+    <rect x="740" y="450" width="270" height="92" rx="12" fill="#fff" stroke="#cdbfda"/><text x="760" y="480" font-size="17" font-weight="700" fill="#202a26">RPC Event Stream</text><text x="760" y="506" font-size="14" fill="#5d6660">文本增量 · Tool 生命周期</text><text x="760" y="527" font-size="14" fill="#5d6660">Session · HITL · Error · Settled</text>
+  </g>
+
+  <!-- BIM boxes -->
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif">
+    <rect x="1078" y="238" width="298" height="88" rx="12" fill="#fff" stroke="#b9ceb9"/><text x="1098" y="268" font-size="17" font-weight="700" fill="#202a26">NewRevit MCP Server</text><text x="1098" y="294" font-size="14" fill="#5d6660">消费已验证的 Tool / Skills 能力</text><text x="1098" y="315" font-size="14" fill="#5d6660">Desktop 不重新实现 BIM 逻辑</text>
+    <rect x="1078" y="344" width="298" height="88" rx="12" fill="#fff" stroke="#b9ceb9"/><text x="1098" y="374" font-size="17" font-weight="700" fill="#202a26">WebSocket Bridge</text><text x="1098" y="400" font-size="14" fill="#5d6660">长连接双向通信</text><text x="1098" y="421" font-size="14" fill="#5d6660">Readiness 与真实 Tool 执行分层验证</text>
+    <rect x="1078" y="450" width="298" height="92" rx="12" fill="#fff" stroke="#b9ceb9"/><text x="1098" y="480" font-size="17" font-weight="700" fill="#202a26">Revit Add-in / Revit API</text><text x="1098" y="506" font-size="14" fill="#5d6660">在 Revit.exe 内执行确定性 BIM 操作</text><text x="1098" y="527" font-size="14" fill="#5d6660">真实模型是最终事实来源</text>
+  </g>
+
+  <!-- command path -->
+  <path d="M334 657 C365 657 375 275 402 275" fill="none" stroke="#456f9d" stroke-width="3" marker-end="url(#arrowBlue)"/>
+  <text x="344" y="636" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#456f9d">Tauri invoke · command</text>
+  <path d="M672 395 C700 395 712 282 740 282" fill="none" stroke="#7a5b2c" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="678" y="373" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#7a5b2c">stdin Pipe · JSONL</text>
+  <path d="M1010 388 C1034 388 1048 282 1078 282" fill="none" stroke="#745d91" stroke-width="3" marker-end="url(#arrowPurple)"/>
+  <text x="1017" y="366" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#745d91">MCP</text>
+
+  <!-- event path -->
+  <path d="M740 496 C710 496 700 488 672 488" fill="none" stroke="#745d91" stroke-width="3" marker-end="url(#arrowPurple)"/>
+  <text x="679" y="470" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#745d91">stdout · JSONL events</text>
+  <path d="M402 488 C372 488 360 465 334 465" fill="none" stroke="#35604a" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="340" y="445" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#35604a">Tauri emit / listen</text>
+
+  <!-- bottom explanation cards -->
+  <rect x="64" y="716" width="608" height="50" rx="10" fill="#dfeaf3"/>
+  <text x="84" y="738" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#2f5274">Command Path</text>
+  <text x="198" y="738" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="#42535f">用户操作 → invoke → Rust → stdin → Pi</text>
+  <text x="84" y="758" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#5d6660">命令被接受不等于任务完成；执行结果通过异步事件返回。</text>
+
+  <rect x="740" y="716" width="636" height="50" rx="10" fill="#e8e0ef"/>
+  <text x="760" y="738" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#5f4a78">Event Path</text>
+  <text x="852" y="738" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="#51495b">Pi → stdout → decoder → Rust event → AgentEvent → Reducer → UI</text>
+  <text x="760" y="758" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#5d6660">这是事件驱动的 Desktop Runtime，不是 Kafka / RabbitMQ 消息队列。</text>
+
+  <!-- footer protocol legend -->
+  <rect x="40" y="812" width="1360" height="54" rx="14" fill="#eceee7" stroke="#d5dbd2"/>
+  <text x="64" y="845" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#35604a">协议速记</text>
+  <text x="142" y="845" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#5d6660">Tauri invoke = Frontend→Rust RPC · stdin/stdout = 本地进程 Pipe · JSONL = 消息 framing · Tauri Event = 应用事件桥 · WebSocket = MCP Server↔Revit 双向长连接</text>
+</svg>
