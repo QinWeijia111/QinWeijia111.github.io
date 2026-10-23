@@ -83,7 +83,6 @@ const related = data.crossProject
               <figcaption>
                 <strong>{diagram.title}</strong>
                 <p>{diagram.description}</p>
-                <span>概念架构图 · 点击查看大图</span>
               </figcaption>
             </figure>
           ))}
@@ -219,17 +218,10 @@ const related = data.crossProject
   }
 
   .architecture-diagram-card p {
-    margin: 0 0 10px;
+    margin: 0;
     font-size: 15px;
     line-height: 1.8;
     color: var(--muted);
-  }
-
-  .architecture-diagram-card span {
-    font-family: 'SFMono-Regular', Consolas, monospace;
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    color: var(--accent);
   }
 
   @media (max-width: 720px) {
