@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="930" viewBox="0 0 1440 930" role="img" aria-labelledby="title desc">
+  <title id="title">PiRevit fake-Pi Integration 与 Runtime Startup</title>
+  <desc id="desc">左侧展示 fake Pi 测试替身如何通过真实子进程、Pipe 和 JSONL 验证协议；右侧展示 PiProcessManager 的启动、generation 隔离、握手与 Ready 判定。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#35604a"/></marker>
+    <marker id="arrowGold" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#9a6c25"/></marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#1d2b24" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="1440" height="930" fill="#f5f5f0"/>
+  <rect x="40" y="34" width="1360" height="104" rx="18" fill="#202a26"/>
+  <text x="72" y="82" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="30" font-weight="700" fill="#f7f8f3">fake-Pi Integration + PiProcessManager Startup</text>
+  <text x="72" y="116" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" fill="#cdd7d0">测试替身验证真实 IPC 边界；启动流程通过握手把“进程活着”提升为“Agent Runtime Ready”</text>
+
+  <!-- left/right panels -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="166" width="660" height="680" rx="18" fill="#eef4f9" stroke="#b9ccdd"/>
+    <rect x="720" y="166" width="680" height="680" rx="18" fill="#f7f0e5" stroke="#dbc8a8"/>
+  </g>
+
+  <text x="66" y="208" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="22" font-weight="700" fill="#2f5274">A · fake-Pi process-level integration</text>
+  <text x="746" y="208" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="22" font-weight="700" fill="#7a5b2c">B · PiProcessManager.start() bootstrap</text>
+
+  <!-- fake pi flow -->
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif">
+    <rect x="66" y="242" width="188" height="102" rx="14" fill="#fff" stroke="#b9ccdd"/>
+    <text x="86" y="272" font-size="17" font-weight="700" fill="#202a26">Rust Integration Test</text>
+    <text x="86" y="298" font-size="13" fill="#5d6660">spawn 子进程</text>
+    <text x="86" y="320" font-size="13" fill="#5d6660">写 command / 读 event</text>
+
+    <rect x="286" y="242" width="188" height="102" rx="14" fill="#fff" stroke="#b9ccdd"/>
+    <text x="306" y="272" font-size="17" font-weight="700" fill="#202a26">OS Process Boundary</text>
+    <text x="306" y="298" font-size="13" fill="#5d6660">stdin / stdout / stderr</text>
+    <text x="306" y="320" font-size="13" fill="#5d6660">真实 Pipe，不是函数 Mock</text>
+
+    <rect x="506" y="242" width="168" height="102" rx="14" fill="#fff" stroke="#b9ccdd"/>
+    <text x="526" y="272" font-size="17" font-weight="700" fill="#202a26">fake Pi</text>
+    <text x="526" y="298" font-size="13" fill="#5d6660">极简 Pi RPC 行为</text>
+    <text x="526" y="320" font-size="13" fill="#5d6660">无 LLM / MCP / Revit</text>
+  </g>
+  <path d="M254 292 H286" stroke="#456f9d" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M474 292 H506" stroke="#456f9d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- fake pi internals -->
+  <rect x="66" y="374" width="608" height="244" rx="14" fill="#fff" stroke="#cbd8e3"/>
+  <text x="88" y="407" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="17" font-weight="700" fill="#202a26">fake Pi 如何工作</text>
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13">
+    <rect x="88" y="430" width="130" height="70" rx="10" fill="#e5eef6"/><text x="104" y="456" font-weight="700" fill="#2f5274">1 · Buffer stdin</text><text x="104" y="480" fill="#5d6660">按换行切 JSONL</text>
+    <rect x="236" y="430" width="130" height="70" rx="10" fill="#e5eef6"/><text x="252" y="456" font-weight="700" fill="#2f5274">2 · Parse</text><text x="252" y="480" fill="#5d6660">识别请求类型</text>
+    <rect x="384" y="430" width="130" height="70" rx="10" fill="#e5eef6"/><text x="400" y="456" font-weight="700" fill="#2f5274">3 · Simulate</text><text x="400" y="480" fill="#5d6660">状态 / Prompt / HITL</text>
+    <rect x="532" y="430" width="120" height="70" rx="10" fill="#e5eef6"/><text x="548" y="456" font-weight="700" fill="#2f5274">4 · Emit</text><text x="548" y="480" fill="#5d6660">stdout JSONL</text>
+  </g>
+  <path d="M218 465 H236" stroke="#456f9d" stroke-width="2" marker-end="url(#arrow)"/><path d="M366 465 H384" stroke="#456f9d" stroke-width="2" marker-end="url(#arrow)"/><path d="M514 465 H532" stroke="#456f9d" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="88" y="536" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#202a26">返回的关键生命周期</text>
+  <text x="88" y="562" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#5d6660">command accepted → agent start → streaming text → message end → agent settled</text>
+  <text x="88" y="589" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#5d6660">HITL：requestId 关联 UI request 与 response，等待用户期间仍保持 active run。</text>
+
+  <!-- 7 byte decoder test -->
+  <rect x="66" y="638" width="608" height="112" rx="14" fill="#dfeaf3"/>
+  <text x="88" y="670" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#2f5274">为什么故意每次只读极小 chunk？</text>
+  <text x="88" y="697" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#42535f">强制制造 Stream Fragmentation：一条 JSON 可能被拆成多次 read。</text>
+  <text x="88" y="722" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#42535f">只有真正按“buffer → 找换行 → 解码完整 record”实现的 JsonlDecoder 才能稳定通过。</text>
+
+  <rect x="66" y="770" width="608" height="54" rx="12" fill="#fff" stroke="#b9ccdd"/>
+  <text x="88" y="793" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#2f5274">测试边界</text>
+  <text x="156" y="793" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#5d6660">真实 Process + Pipe + JSONL，但不包含真实模型、MCP、React 与 Revit；因此不是 E2E。</text>
+  <text x="88" y="814" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#5d6660">它位于 Unit Test 与真实 Revit E2E 之间，成本低、可复现、能覆盖跨进程协议问题。</text>
+
+  <!-- startup flow -->
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif">
+    <rect x="748" y="242" width="290" height="94" rx="14" fill="#fff" stroke="#dbc8a8"/>
+    <text x="770" y="272" font-size="17" font-weight="700" fill="#202a26">1 · Resolve dependencies</text>
+    <text x="770" y="298" font-size="13" fill="#5d6660">Private Runtime · Workspace · Extensions</text>
+    <text x="770" y="319" font-size="13" fill="#5d6660">Model config · Session directory</text>
+
+    <rect x="1080" y="242" width="292" height="94" rx="14" fill="#fff" stroke="#dbc8a8"/>
+    <text x="1102" y="272" font-size="17" font-weight="700" fill="#202a26">2 · Publish Starting</text>
+    <text x="1102" y="298" font-size="13" fill="#5d6660">generation + 1</text>
+    <text x="1102" y="319" font-size="13" fill="#5d6660">防止旧 reader 污染新进程</text>
+  </g>
+  <path d="M1038 289 H1080" stroke="#9a6c25" stroke-width="3" marker-end="url(#arrowGold)"/>
+
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif">
+    <rect x="748" y="364" width="290" height="106" rx="14" fill="#fff" stroke="#dbc8a8"/>
+    <text x="770" y="394" font-size="17" font-weight="700" fill="#202a26">3 · Spawn child process</text>
+    <text x="770" y="420" font-size="13" fill="#5d6660">Working directory + env + credential</text>
+    <text x="770" y="441" font-size="13" fill="#5d6660">stdin / stdout / stderr 全部 piped</text>
+    <text x="770" y="462" font-size="13" fill="#5d6660">spawn 成功后获得 PID 与 Child Handle</text>
+
+    <rect x="1080" y="364" width="292" height="106" rx="14" fill="#fff" stroke="#dbc8a8"/>
+    <text x="1102" y="394" font-size="17" font-weight="700" fill="#202a26">4 · Start reader threads</text>
+    <text x="1102" y="420" font-size="13" fill="#5d6660">stdout：JSONL decoder + protocol handler</text>
+    <text x="1102" y="441" font-size="13" fill="#5d6660">stderr：diagnostic event</text>
+    <text x="1102" y="462" font-size="13" fill="#5d6660">blocking I/O 从 GUI / command 线程隔离</text>
+  </g>
+  <path d="M1226 336 V364" stroke="#9a6c25" stroke-width="3" marker-end="url(#arrowGold)"/>
+  <path d="M1080 417 H1038" stroke="#9a6c25" stroke-width="3" marker-end="url(#arrowGold)"/>
+
+  <!-- handshake state machine -->
+  <rect x="748" y="500" width="624" height="244" rx="14" fill="#fff" stroke="#dbc8a8"/>
+  <text x="770" y="532" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="17" font-weight="700" fill="#202a26">5 · Asynchronous startup handshake</text>
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13">
+    <rect x="770" y="558" width="118" height="58" rx="10" fill="#f3e8d5"/><text x="790" y="583" font-weight="700" fill="#7a5b2c">State check</text><text x="790" y="603" fill="#5d6660">当前会话状态</text>
+    <rect x="914" y="558" width="132" height="58" rx="10" fill="#f3e8d5"/><text x="934" y="583" font-weight="700" fill="#7a5b2c">Fresh session?</text><text x="934" y="603" fill="#5d6660">旧上下文则重置</text>
+    <rect x="1072" y="558" width="130" height="58" rx="10" fill="#f3e8d5"/><text x="1092" y="583" font-weight="700" fill="#7a5b2c">Capability check</text><text x="1092" y="603" fill="#5d6660">MCP 能力已加载</text>
+    <rect x="1228" y="558" width="118" height="58" rx="10" fill="#dfeadf"/><text x="1254" y="583" font-weight="700" fill="#35604a">READY</text><text x="1244" y="603" fill="#5d6660">可接收任务</text>
+  </g>
+  <path d="M888 587 H914" stroke="#9a6c25" stroke-width="2" marker-end="url(#arrowGold)"/><path d="M1046 587 H1072" stroke="#9a6c25" stroke-width="2" marker-end="url(#arrowGold)"/><path d="M1202 587 H1228" stroke="#35604a" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="770" y="652" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#5d6660">握手响应从 stdout 异步返回，由 protocol handler 推动状态机继续；start() 本身不阻塞到 Ready。</text>
+  <rect x="770" y="674" width="576" height="46" rx="10" fill="#f8eee0"/>
+  <text x="790" y="702" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#7a5b2c">Liveness ≠ Readiness：</text>
+  <text x="925" y="702" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#5d6660">进程存在只是“活着”；会话与 MCP 能力验证通过才算“可工作”。</text>
+
+  <!-- generation note -->
+  <rect x="748" y="766" width="624" height="58" rx="12" fill="#f3e8d5"/>
+  <text x="770" y="790" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#7a5b2c">generation = 进程任期 / fencing token</text>
+  <text x="770" y="813" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#5d6660">重启后 generation 递增；旧 stdout/stderr reader 即使晚到，也会因代次不匹配被丢弃。</text>
+
+  <!-- footer -->
+  <rect x="40" y="870" width="1360" height="36" rx="10" fill="#eceee7" stroke="#d5dbd2"/>
+  <text x="62" y="894" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#5d6660">PUBLIC CONCEPT DIAGRAM · 只展示高层运行时与测试设计，不包含私有 Tool Schema、Prompt、Skills 内容或客户工程资产。</text>
+</svg>
