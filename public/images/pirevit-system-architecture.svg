@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="960" viewBox="0 0 1536 960" role="img" aria-labelledby="title desc">
+  <title id="title">PiRevit 整体架构图</title>
+  <desc id="desc">展示 PiRevit 从桌面交互层、应用服务层、Rust 运行时层、Pi Agent Runtime、MCP 能力层到 Revit 执行层的整体架构，以及 HITL、Session、Trace、Provider 和交付能力。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7fbff"/><stop offset="1" stop-color="#fff8f1"/></linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8f3ff"/><stop offset="1" stop-color="#d8eaff"/></linearGradient>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0ecff"/><stop offset="1" stop-color="#e8e0ff"/></linearGradient>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3df"/><stop offset="1" stop-color="#ffe7c1"/></linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8fbf4"/><stop offset="1" stop-color="#d7f4e8"/></linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8f9ff"/><stop offset="1" stop-color="#d9f0fb"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#17324d" flood-opacity="0.10"/></filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#3a72e8"/></marker>
+    <marker id="arrowBack" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#7657d9"/></marker>
+  </defs>
+  <rect width="1536" height="960" fill="url(#bg)"/>
+  <text x="52" y="70" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="42" font-weight="800" fill="#172554">PiRevit 整体架构图</text>
+  <text x="54" y="108" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" fill="#56657a">从桌面工程师交互，到 Agent Runtime、MCP 领域能力，再到真实 Revit 执行</text>
+
+  <g filter="url(#shadow)">
+    <rect x="42" y="150" width="258" height="510" rx="24" fill="url(#blue)" stroke="#a9cdf8"/>
+    <rect x="322" y="150" width="258" height="510" rx="24" fill="url(#violet)" stroke="#c7b7f5"/>
+    <rect x="602" y="150" width="258" height="510" rx="24" fill="url(#amber)" stroke="#f2c983"/>
+    <rect x="882" y="150" width="258" height="510" rx="24" fill="url(#green)" stroke="#9ddfc4"/>
+    <rect x="1162" y="150" width="332" height="510" rx="24" fill="url(#cyan)" stroke="#9acde3"/>
+  </g>
+
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif">
+    <circle cx="75" cy="188" r="18" fill="#3677e8"/><text x="69" y="195" font-size="18" font-weight="700" fill="white">1</text>
+    <text x="104" y="195" font-size="22" font-weight="800" fill="#184b93">桌面交互层</text>
+    <text x="66" y="229" font-size="14" fill="#53657a">React · Tauri WebView</text>
+    <rect x="66" y="258" width="210" height="86" rx="16" fill="white" fill-opacity=".78"/><text x="86" y="288" font-size="16" font-weight="700" fill="#263a57">任务输入与 Preflight</text><text x="86" y="316" font-size="13" fill="#617084">业务参数先确认，减少执行中打断</text>
+    <rect x="66" y="360" width="210" height="86" rx="16" fill="white" fill-opacity=".78"/><text x="86" y="390" font-size="16" font-weight="700" fill="#263a57">Tool Activity</text><text x="86" y="418" font-size="13" fill="#617084">展示工具、参数摘要、耗时和结果</text>
+    <rect x="66" y="462" width="210" height="86" rx="16" fill="white" fill-opacity=".78"/><text x="86" y="492" font-size="16" font-weight="700" fill="#263a57">Human-in-the-loop</text><text x="86" y="520" font-size="13" fill="#617084">动态歧义出现时请求工程师决策</text>
+    <rect x="66" y="564" width="210" height="70" rx="16" fill="white" fill-opacity=".78"/><text x="86" y="594" font-size="16" font-weight="700" fill="#263a57">Session / History</text><text x="86" y="618" font-size="13" fill="#617084">切换、恢复用户可观察执行过程</text>
+
+    <circle cx="355" cy="188" r="18" fill="#7657d9"/><text x="349" y="195" font-size="18" font-weight="700" fill="white">2</text>
+    <text x="384" y="195" font-size="22" font-weight="800" fill="#5d43b5">前端应用层</text>
+    <text x="346" y="229" font-size="14" fill="#655f7b">AgentService · State · Events</text>
+    <rect x="346" y="258" width="210" height="92" rx="16" fill="white" fill-opacity=".78"/><text x="366" y="288" font-size="16" font-weight="700" fill="#332b54">AgentService</text><text x="366" y="316" font-size="13" fill="#6f6980">隔离 UI 与 Pi 原始协议</text><text x="366" y="337" font-size="13" fill="#6f6980">sendPrompt / Abort / Session / HITL</text>
+    <rect x="346" y="368" width="210" height="92" rx="16" fill="white" fill-opacity=".78"/><text x="366" y="398" font-size="16" font-weight="700" fill="#332b54">AgentEvent Normalizer</text><text x="366" y="426" font-size="13" fill="#6f6980">Raw Pi Event → Application Event</text><text x="366" y="447" font-size="13" fill="#6f6980">Text / Tool / UserInput / Error</text>
+    <rect x="346" y="478" width="210" height="92" rx="16" fill="white" fill-opacity=".78"/><text x="366" y="508" font-size="16" font-weight="700" fill="#332b54">Reducer / State</text><text x="366" y="536" font-size="13" fill="#6f6980">idle · running · waiting · error</text><text x="366" y="557" font-size="13" fill="#6f6980">事件驱动 UI 状态更新</text>
+    <rect x="346" y="588" width="210" height="46" rx="14" fill="white" fill-opacity=".78"/><text x="366" y="617" font-size="14" font-weight="700" fill="#5d43b5">Tauri invoke / listen</text>
+
+    <circle cx="635" cy="188" r="18" fill="#e99a2b"/><text x="629" y="195" font-size="18" font-weight="700" fill="white">3</text>
+    <text x="664" y="195" font-size="22" font-weight="800" fill="#9a5b08">Rust Runtime 层</text>
+    <text x="626" y="229" font-size="14" fill="#7c6b54">Tauri Backend · PiProcessManager</text>
+    <rect x="626" y="258" width="210" height="92" rx="16" fill="white" fill-opacity=".8"/><text x="646" y="288" font-size="16" font-weight="700" fill="#5d3f19">Process Lifecycle</text><text x="646" y="316" font-size="13" fill="#806f58">启动 / 停止 / PID / 进程树清理</text><text x="646" y="337" font-size="13" fill="#806f58">Starting → Ready → Error</text>
+    <rect x="626" y="368" width="210" height="92" rx="16" fill="white" fill-opacity=".8"/><text x="646" y="398" font-size="16" font-weight="700" fill="#5d3f19">IPC / JSONL</text><text x="646" y="426" font-size="13" fill="#806f58">stdin → Command</text><text x="646" y="447" font-size="13" fill="#806f58">stdout → Streaming Event · stderr → Log</text>
+    <rect x="626" y="478" width="210" height="92" rx="16" fill="white" fill-opacity=".8"/><text x="646" y="508" font-size="16" font-weight="700" fill="#5d3f19">Runtime Safety</text><text x="646" y="536" font-size="13" fill="#806f58">generation 隔离旧进程事件</text><text x="646" y="557" font-size="13" fill="#806f58">启动握手与 Readiness 验证</text>
+    <rect x="626" y="588" width="210" height="46" rx="14" fill="white" fill-opacity=".8"/><text x="646" y="617" font-size="14" font-weight="700" fill="#9a5b08">Session · Trace · Diagnostics</text>
+
+    <circle cx="915" cy="188" r="18" fill="#24a67a"/><text x="909" y="195" font-size="18" font-weight="700" fill="white">4</text>
+    <text x="944" y="195" font-size="22" font-weight="800" fill="#147858">Pi Agent Runtime</text>
+    <text x="906" y="229" font-size="14" fill="#4c7467">独立 Agent 进程 · Pi 提供 Agent Core</text>
+    <rect x="906" y="258" width="210" height="82" rx="16" fill="white" fill-opacity=".8"/><text x="926" y="288" font-size="16" font-weight="700" fill="#245a49">Agent Loop</text><text x="926" y="316" font-size="13" fill="#5d776f">LLM 推理 → Tool Call → Tool Result → 续答</text>
+    <rect x="906" y="356" width="210" height="82" rx="16" fill="white" fill-opacity=".8"/><text x="926" y="386" font-size="16" font-weight="700" fill="#245a49">Agent Workspace</text><text x="926" y="414" font-size="13" fill="#5d776f">AGENTS · Settings · Skills · MCP 配置</text>
+    <rect x="906" y="454" width="210" height="82" rx="16" fill="white" fill-opacity=".8"/><text x="926" y="484" font-size="16" font-weight="700" fill="#245a49">HITL Extension</text><text x="926" y="512" font-size="13" fill="#5d776f">运行中把 select / confirm 请求交给 UI</text>
+    <rect x="906" y="552" width="210" height="82" rx="16" fill="white" fill-opacity=".8"/><text x="926" y="582" font-size="16" font-weight="700" fill="#245a49">MCP Adapter</text><text x="926" y="610" font-size="13" fill="#5d776f">把 Pi Tool Calling 接到 NewRevit 能力层</text>
+
+    <circle cx="1195" cy="188" r="18" fill="#2399c5"/><text x="1189" y="195" font-size="18" font-weight="700" fill="white">5</text>
+    <text x="1224" y="195" font-size="22" font-weight="800" fill="#126987">BIM 能力与执行层</text>
+    <text x="1186" y="229" font-size="14" fill="#527686">NewRevit MCP · WebSocket · Revit Add-in</text>
+    <rect x="1186" y="258" width="284" height="100" rx="16" fill="white" fill-opacity=".82"/><text x="1208" y="288" font-size="16" font-weight="700" fill="#22546a">NewRevit MCP Server</text><text x="1208" y="316" font-size="13" fill="#5e7783">标准 Tool Contract · 领域高层 Tool · Skills</text><text x="1208" y="338" font-size="13" fill="#5e7783">Agent 不直接拼接易漂移的底层 Revit 操作</text>
+    <rect x="1186" y="378" width="284" height="100" rx="16" fill="white" fill-opacity=".82"/><text x="1208" y="408" font-size="16" font-weight="700" fill="#22546a">WebSocket :8999</text><text x="1208" y="436" font-size="13" fill="#5e7783">MCP Server ↔ Revit Add-in</text><text x="1208" y="458" font-size="13" fill="#5e7783">长连接、命令分发、结果返回</text>
+    <rect x="1186" y="498" width="284" height="136" rx="16" fill="white" fill-opacity=".82"/><text x="1208" y="528" font-size="16" font-weight="700" fill="#22546a">Revit Add-in / Revit API</text><text x="1208" y="556" font-size="13" fill="#5e7783">真实工程上下文查询</text><text x="1208" y="578" font-size="13" fill="#5e7783">族实例 · Connector · 管路 · Transaction</text><text x="1208" y="600" font-size="13" fill="#5e7783">确定性后端完成建模、回滚与验收</text>
+  </g>
+
+  <path d="M300 401 H322" stroke="#3a72e8" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M580 401 H602" stroke="#3a72e8" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M860 401 H882" stroke="#3a72e8" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M1140 401 H1162" stroke="#3a72e8" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="584" y="383" font-family="monospace" font-size="12" fill="#4269b5">Tauri IPC</text>
+  <text x="851" y="383" font-family="monospace" font-size="12" fill="#4269b5">JSONL stdin</text>
+  <text x="1105" y="383" font-family="monospace" font-size="12" fill="#4269b5">MCP stdio</text>
+
+  <path d="M882 445 H860" stroke="#7657d9" stroke-width="3" marker-end="url(#arrowBack)"/>
+  <path d="M602 445 H580" stroke="#7657d9" stroke-width="3" marker-end="url(#arrowBack)"/>
+  <path d="M322 445 H300" stroke="#7657d9" stroke-width="3" marker-end="url(#arrowBack)"/>
+  <text x="819" y="468" font-family="monospace" font-size="12" fill="#7657d9">JSONL stdout events</text>
+
+  <rect x="42" y="700" width="1452" height="202" rx="24" fill="#ffffff" stroke="#d8e1ec" filter="url(#shadow)"/>
+  <text x="68" y="742" font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif" font-size="22" font-weight="800" fill="#25344e">横向能力：让 Runtime 从“能运行”变成“可交付”</text>
+  <g font-family="Arial,'PingFang SC','Microsoft YaHei',sans-serif">
+    <rect x="68" y="772" width="260" height="96" rx="18" fill="#edf4ff"/><text x="90" y="804" font-size="16" font-weight="700" fill="#275aa6">Provider Compatibility</text><text x="90" y="832" font-size="13" fill="#617084">普通响应 · SSE · Tool Call</text><text x="90" y="853" font-size="13" fill="#617084">Tool Result continuation 合同验证</text>
+    <rect x="350" y="772" width="260" height="96" rx="18" fill="#f2efff"/><text x="372" y="804" font-size="16" font-weight="700" fill="#6548bd">Observability</text><text x="372" y="832" font-size="13" fill="#6d6681">Tool Activity · Trace · stderr</text><text x="372" y="853" font-size="13" fill="#6d6681">requestId / toolCallId 关联执行链</text>
+    <rect x="632" y="772" width="260" height="96" rx="18" fill="#fff3e3"/><text x="654" y="804" font-size="16" font-weight="700" fill="#a26013">Setup Center</text><text x="654" y="832" font-size="13" fill="#806f58">Runtime · Provider · Add-in · Revit</text><text x="654" y="853" font-size="13" fill="#806f58">以 Readiness 而非“进程活着”判定可用</text>
+    <rect x="914" y="772" width="260" height="96" rx="18" fill="#eaf9f3"/><text x="936" y="804" font-size="16" font-weight="700" fill="#197454">Private Runtime</text><text x="936" y="832" font-size="13" fill="#5d776f">Node · Pi · MCP · Workspace</text><text x="936" y="853" font-size="13" fill="#5d776f">SHA-256 校验与受控版本交付</text>
+    <rect x="1196" y="772" width="270" height="96" rx="18" fill="#eaf8fd"/><text x="1218" y="804" font-size="16" font-weight="700" fill="#19708f">Verification</text><text x="1218" y="832" font-size="13" fill="#5e7783">Unit · Integration · UI</text><text x="1218" y="853" font-size="13" fill="#5e7783">真实 Revit E2E 作为最终验收关卡</text>
+  </g>
+  <text x="54" y="935" font-family="monospace" font-size="11" fill="#6f7d8e">PUBLIC CONCEPT DIAGRAM · Pi provides Agent Core; PiRevit focuses on Runtime integration, desktop interaction, observability and Windows delivery.</text>
+</svg>
