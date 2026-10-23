@@ -61,9 +61,12 @@ const related = data.crossProject
       </section>
     )}
     {data.architectureDiagrams.length > 0 && (
-      <section class="detail-section" aria-labelledby="architecture-diagrams-title">
-        <p class="eyebrow">运行时拆解</p>
-        <h2 id="architecture-diagrams-title">从消息流到启动握手</h2>
+      <section
+        class="detail-section"
+        aria-labelledby="architecture-diagrams-title"
+      >
+        <p class="eyebrow">系统设计</p>
+        <h2 id="architecture-diagrams-title">PiRevit 系统架构</h2>
         <div class="architecture-diagram-list">
           {data.architectureDiagrams.map((diagram) => (
             <figure class="architecture-diagram-card">
@@ -73,8 +76,8 @@ const related = data.crossProject
                   alt={diagram.alt}
                   loading="lazy"
                   decoding="async"
-                  width="1440"
-                  height="930"
+                  width="1536"
+                  height="960"
                 />
               </a>
               <figcaption>
