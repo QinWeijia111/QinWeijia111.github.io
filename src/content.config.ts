@@ -19,6 +19,8 @@ const detailSection = z.object({
 });
 
 const architectureDiagram = z.object({
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
   src: z.string().startsWith('/images/'),
   alt: z.string(),
   title: z.string(),

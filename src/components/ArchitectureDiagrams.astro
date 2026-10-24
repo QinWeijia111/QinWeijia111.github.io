@@ -1,0 +1,308 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props {
+  diagrams: CollectionEntry<'projects'>['data']['architectureDiagrams'];
+}
+const { diagrams } = Astro.props;
+---
+
+<section
+  class="detail-section"
+  aria-labelledby="architecture-diagrams-title"
+  id="architecture-diagrams"
+>
+  <p class="eyebrow">系统设计</p>
+  <h2 id="architecture-diagrams-title">架构图</h2>
+  <p class="diagram-intro">
+    图中展示系统职责与通信关系。点击图片可查看完整 PNG。
+  </p>
+  {diagrams.length > 1 && (
+    <nav class="diagram-nav" aria-label="架构图导航">
+      {diagrams.map((diagram, index) => (
+        <a href={`#architecture-diagram-${index + 1}`}>
+          <span aria-hidden="true">0{index + 1}</span>
+          {diagram.title}
+        </a>
+      ))}
+    </nav>
+  )}
+  <div class="diagram-list">
+    {diagrams.map((diagram, index) => (
+      <figure class="diagram-card" id={`architecture-diagram-${index + 1}`}>
+        <figcaption>
+          <div>
+            <span class="diagram-number">0{index + 1} / PNG</span>
+            <h3>{diagram.title}</h3>
+          </div>
+          <div class="diagram-actions">
+            <a
+              href={diagram.src}
+              target="_blank"
+              rel="noreferrer"
+              data-diagram-open
+              aria-haspopup="dialog"
+              aria-label={`${diagram.title}：查看 PNG 原图`}
+            >
+              查看 PNG 原图 <span aria-hidden="true">↗</span>
+            </a>
+            <a
+              href={diagram.src}
+              download
+              aria-label={`${diagram.title}：下载 PNG`}
+            >
+              下载 PNG <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+        </figcaption>
+        <a
+          class="diagram-image-link"
+          href={diagram.src}
+          target="_blank"
+          rel="noreferrer"
+          data-diagram-open
+          aria-haspopup="dialog"
+          aria-label={`${diagram.title}：放大查看架构图`}
+        >
+          <img
+            src={diagram.src}
+            alt={diagram.alt}
+            width={diagram.width}
+            height={diagram.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+        <p class="diagram-description">{diagram.description}</p>
+      </figure>
+    ))}
+  </div>
+  <dialog class="diagram-viewer" aria-labelledby="diagram-viewer-title">
+    <div class="viewer-header">
+      <h3 id="diagram-viewer-title">架构图</h3>
+      <button type="button" class="viewer-close">
+        关闭图片 <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="viewer-image-wrap">
+      <img class="viewer-image" alt="" />
+    </div>
+  </dialog>
+</section>
+<script>
+  const section = document.querySelector('#architecture-diagrams');
+  const dialog = section?.querySelector<HTMLDialogElement>('.diagram-viewer');
+  if (section && dialog && typeof dialog.showModal === 'function') {
+    const image = dialog.querySelector<HTMLImageElement>('.viewer-image')!;
+    const title = dialog.querySelector<HTMLElement>('#diagram-viewer-title')!;
+    let opener: HTMLAnchorElement | undefined;
+    let previousOverflow = '';
+    section
+      .querySelectorAll<HTMLAnchorElement>('[data-diagram-open]')
+      .forEach((link) => {
+        link.addEventListener('click', (event) => {
+          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+            return;
+          event.preventDefault();
+          const figure = link.closest('figure')!;
+          const original = figure.querySelector<HTMLImageElement>('img')!;
+          image.src = original.src;
+          image.alt = original.alt;
+          image.width = original.width;
+          image.height = original.height;
+          title.textContent = figure.querySelector('h3')!.textContent;
+          opener = link;
+          previousOverflow = document.documentElement.style.overflow;
+          document.documentElement.style.overflow = 'hidden';
+          dialog.showModal();
+        });
+      });
+    const restorePage = () => {
+      document.documentElement.style.overflow = previousOverflow;
+      opener?.focus({ preventScroll: true });
+    };
+    const closeViewer = () => {
+      dialog.close();
+      restorePage();
+    };
+    dialog
+      .querySelector('.viewer-close')
+      ?.addEventListener('click', closeViewer);
+    dialog.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      closeViewer();
+    });
+    dialog.addEventListener('click', (event) => {
+      const bounds = dialog.getBoundingClientRect();
+      if (
+        event.target === dialog &&
+        (event.clientX < bounds.left ||
+          event.clientX > bounds.right ||
+          event.clientY < bounds.top ||
+          event.clientY > bounds.bottom)
+      )
+        closeViewer();
+    });
+    dialog.addEventListener('close', restorePage);
+  }
+</script>
+<style>
+  .diagram-viewer {
+    padding: 0;
+    width: min(1600px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    margin: auto;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text);
+    background: var(--bg);
+    overflow: auto;
+  }
+  .diagram-viewer::backdrop {
+    background: rgb(0 0 0 / 72%);
+  }
+  .viewer-header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    z-index: 1;
+  }
+  .viewer-header h3 {
+    font-size: 18px;
+  }
+  .viewer-close {
+    flex-shrink: 0;
+    padding: 10px 14px;
+    color: var(--text);
+    background: var(--soft);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .viewer-image-wrap {
+    overflow: auto;
+    background: white;
+  }
+  .viewer-image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @media (max-width: 700px) {
+    .viewer-header {
+      padding: 12px;
+    }
+    .viewer-header h3 {
+      font-size: 16px;
+    }
+  }
+
+  .diagram-intro {
+    max-width: 780px;
+  }
+  .diagram-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    margin: 28px 0 32px;
+    font-size: 14px;
+  }
+  .diagram-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--line);
+    padding: 8px 0;
+  }
+  .diagram-nav span,
+  .diagram-number {
+    font:
+      12px 'SFMono-Regular',
+      Consolas,
+      monospace;
+    color: var(--accent);
+  }
+  .diagram-list {
+    display: grid;
+    gap: 32px;
+  }
+  .diagram-card {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg);
+    scroll-margin-top: 24px;
+  }
+  .diagram-card figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+    padding: 24px;
+  }
+  .diagram-number {
+    display: block;
+    margin-bottom: 10px;
+  }
+  .diagram-card h3 {
+    font-size: 21px;
+    letter-spacing: -0.01em;
+  }
+  .diagram-actions {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--accent);
+  }
+  .diagram-actions a {
+    padding-block: 8px;
+    white-space: nowrap;
+  }
+  .diagram-image-link {
+    display: block;
+    background: #fff;
+  }
+  .diagram-card img {
+    width: 100%;
+    height: auto;
+  }
+  .diagram-description {
+    padding: 24px;
+    border-top: 1px solid var(--line);
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--muted);
+  }
+  @media (max-width: 700px) {
+    .diagram-card figcaption {
+      display: block;
+      padding: 20px;
+    }
+    .diagram-actions {
+      margin-top: 14px;
+      gap: 20px;
+    }
+    .diagram-card h3 {
+      font-size: 19px;
+    }
+    .diagram-description {
+      padding: 20px;
+    }
+    .diagram-nav {
+      display: grid;
+      gap: 6px;
+    }
+    .diagram-nav a {
+      width: fit-content;
+    }
+  }
+</style>

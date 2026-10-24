@@ -38,10 +38,12 @@ architecture:
   - Revit
 architectureNote: Pi 提供 Agent Core；PiRevit 负责运行时集成、桌面交互、可观测性和产品化。
 architectureDiagrams:
-  - src: /images/pirevit-system-architecture.svg
-    alt: PiRevit 整体系统架构图，展示桌面交互层、AgentService 前端应用层、Rust PiProcessManager、Pi Agent Runtime、NewRevit MCP 与 Revit 执行层，以及 HITL、Session、Trace、Provider 与交付能力。
-    title: PiRevit 整体系统架构
-    description: PiRevit 将桌面产品、Runtime 管理与 BIM 领域能力分层：React/Tauri 负责工程师交互，AgentService 与状态层隔离 Pi 原始协议，Rust PiProcessManager 管理独立 Pi 进程、JSONL IPC、运行状态与启动握手；Pi 提供 Agent Core，并通过 MCP Adapter 消费 NewRevit 的 Tool 与 Skills，最终由 Revit Add-in 调用 Revit API 完成真实工程操作。HITL、Session、Trace、Provider 兼容性和私有 Runtime 共同构成产品化与交付能力。
+  - src: /images/pirevit-architecture-png-v3.png
+    width: 1536
+    height: 1024
+    alt: PiRevit 整体架构 PNG：以抽象模块展示 React/Tauri 与 AgentService、Rust PiProcessManager、Pi Agent Runtime、NewRevit MCP 和 Revit 执行层，并展示消息往返和启动就绪流程。不包含软件界面截图。
+    title: PiRevit 整体架构图
+    description: 桌面应用通过 Rust 管理层连接独立 Pi 运行时；Pi 通过 MCP 适配消费 NewRevit 能力，再由 Revit Add-in 与 Revit API 执行工程操作。下方展示消息反馈与启动就绪流程。Pi 提供 Agent Core，PiRevit 负责运行时集成、桌面交互、可观测性和 Windows 产品化。
 links: []
 myRole: 负责运行时集成、桌面交互、可观测性与 Windows 产品化。Pi 提供 Agent Core；我的工作重点是将它与领域能力及产品体验连接起来。
 resultNote: 从 Agent 能力到桌面交互与 Windows 交付，形成完整的产品工程实践；运行时核心使用 Pi，不声称自研 Pi Agent Core。

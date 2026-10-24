@@ -57,3 +57,9 @@ The system font stack removes the unused Inter preference; Chinese headings use 
 Agent visual inspection covered Desktop/Mobile project cards, prose line width, task journeys, module cards, metrics, demo guidance, architecture wrapping and related-project links. Review captures are in [the screenshot index](review/pr1-readability/README.md). These captures show webpage text and concept posters only; no new real Revit screenshot was published. The real screenshot poster enhancement is deferred for separate human approval.
 
 The owner’s final visual/content acceptance remains pending. Automated checks and agent screenshot inspection do not substitute for that human review. PR #1 remains open and must not be merged by an agent.
+
+## PNG architecture and return navigation — 2026-10-24
+
+The owner accepted the generated PNG and requested that enlargement always offer a clear way back. The selected PNG replaces the earlier SVG. Actual PNG signature, dimensions, HTTP Content-Type and download target are validated. Both the thumbnail and the original-image action now open a native on-page dialog. Close button, backdrop and Escape return to the same URL, preserve scroll position, restore page scrolling and return keyboard focus to the trigger. Dialog accessibility is checked on desktop and mobile.
+
+Local validation passed: format/check, lint, Astro check (zero diagnostics), 6 content tests, build/site validation and 15 browser tests. Local mobile Lighthouse for home and NewRevit remains 100 in all four measured categories. [Desktop/Mobile viewer screenshots](review/png-viewer/README.md) show open and returned states. The generated PNG content itself was accepted in the conversation; no new model or UI screenshot was introduced for this fix.

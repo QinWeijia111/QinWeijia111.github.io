@@ -52,4 +52,4 @@ The owner prohibits public resume downloads: use the email-based **Request Resum
 
 Information architecture was informed by [folio](https://github.com/rhyswdev/folio) and [Astro Portfolio Template](https://github.com/floating-astronaut/astro-portfolio-template). The implementation, visual system and concept diagrams were created for this portfolio; no template code or media was copied.
 
-No analytics, cookies, remote fonts, backend or client framework is required. Only the theme toggle uses client JavaScript.
+No analytics, cookies, remote fonts, backend or client framework is required. Client JavaScript is limited to the theme toggle and a small native dialog for architecture-image viewing.
