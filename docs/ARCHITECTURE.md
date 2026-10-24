@@ -14,7 +14,7 @@ Tailwind v4 is integrated through its Vite plugin. Prose is capped at 780px insi
 
 ## Client runtime
 
-Only theme initialization and a theme toggle execute client JavaScript. A tiny head script applies saved/system preference before paint. Storage failure is handled; CSS supplies a system fallback. Without JavaScript, all content and navigation remain available, and the theme button is hidden. No analytics, remote font requests, client router, hydration framework or autoplay video.
+Theme selection and the native architecture-image dialog use small client scripts. A tiny head script applies saved/system preference before paint. Storage failure is handled; CSS supplies a system fallback. Without JavaScript, all content and navigation remain available, and the theme button is hidden. The image viewer stays on the project page, closes through its button, backdrop or Escape, and restores focus and page scrolling. Without JavaScript, the original PNG link remains available in a separate tab. No analytics, remote font requests, client router, hydration framework or autoplay video.
 
 ## Routes and assets
 

@@ -30,7 +30,7 @@ Read `docs/CONTENT_BOUNDARY.md` before adding media or facts. No public PDF/DOCX
 
 ## Coding Rules
 
-Use static Astro, TypeScript, Tailwind utilities and shared CSS. Prefer semantic HTML, native links and native video. Keep browser JavaScript limited to theme selection. Support keyboard navigation, reduced motion and both color themes. Use root paths for this user Pages site. Do not introduce frameworks, telemetry or third-party client scripts without a clear requirement.
+Use static Astro, TypeScript, Tailwind utilities and shared CSS. Prefer semantic HTML, native links and native video. Keep browser JavaScript limited to theme selection and the native architecture-image dialog; do not add client frameworks. Support keyboard navigation, reduced motion and both color themes. Use root paths for this user Pages site. Do not introduce frameworks, telemetry or third-party client scripts without a clear requirement.
 
 ## Validation
 

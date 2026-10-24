@@ -62,3 +62,11 @@ ffmpeg -i INPUT.mp4 -vf 'scale=1280:-2' -c:v libx264 -preset fast -crf 26 \
 ```
 
 Preserve audio only if approved, and encode it separately with AAC. Prefer below 15 MB for the final 2–3 minute demo; inspect text legibility after compression. There is no autoplay. Only approved detail pages load the full video, with poster, controls, captions and `preload="metadata"`; home cards load concept posters only.
+
+## Approved PiRevit architecture PNG — 2026-10-24
+
+The owner accepted the single PNG2-style generated infographic and requested only a fix to returning from enlarged viewing before PR submission. The diagram uses abstract architecture blocks without an invented PiRevit UI, private models, paths, raw schemas or proprietary implementation material. It retains the attribution that Pi supplies Agent Core.
+
+Asset: `public/images/pirevit-architecture-png-v3.png`, 1536×1024. SHA-256: `52064d4e9ca82086f5ef65d2d1dbd920d116c904863758105285f6ba442fdd5e`.
+
+Only this selected final PNG is published; reference inputs, intermediate generated variants and local prompt/review files remain outside tracked public assets. Future actual product/model screenshots still require separate review.

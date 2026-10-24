@@ -84,3 +84,17 @@ test('related engineering projects are reciprocal and six research chapters are 
     ),
   );
 });
+
+test('PiRevit uses one actual PNG architecture image with correct dimensions', async () => {
+  const project = (await projects()).find((p) => p.id === 'pirevit');
+  assert.equal(project.data.architectureDiagrams.length, 1);
+  const diagram = project.data.architectureDiagrams[0];
+  assert(diagram.src.endsWith('.png'));
+  const bytes = await readFile(`public${diagram.src}`);
+  assert.deepEqual(
+    [...bytes.subarray(0, 8)],
+    [137, 80, 78, 71, 13, 10, 26, 10],
+  );
+  assert.equal(bytes.readUInt32BE(16), diagram.width);
+  assert.equal(bytes.readUInt32BE(20), diagram.height);
+});

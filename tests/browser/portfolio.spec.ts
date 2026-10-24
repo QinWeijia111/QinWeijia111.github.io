@@ -179,3 +179,74 @@ test('project relationships and sequential reading links navigate correctly', as
   await expect(page).toHaveURL('/projects/multica-learning/');
   await expect(page.locator('.narrative-cards a')).toHaveCount(6);
 });
+
+test('PiRevit architecture preview and original are PNG and downloadable', async ({
+  page,
+}) => {
+  await page.goto('/projects/pirevit/');
+  const figure = page.locator('.diagram-card');
+  await expect(figure).toHaveCount(1);
+  await figure.scrollIntoViewIfNeeded();
+  const img = figure.locator('img');
+  await expect
+    .poll(() =>
+      img.evaluate(
+        (el: HTMLImageElement) => el.complete && el.naturalWidth > 0,
+      ),
+    )
+    .toBeTruthy();
+  const src = await img.getAttribute('src');
+  expect(src).toMatch(/\.png$/);
+  const response = await page.request.get(src!);
+  expect(response.headers()['content-type']).toContain('image/png');
+  await expect(figure.locator('a[download]')).toHaveAttribute('href', src!);
+  const originalUrl = page.url();
+  const openLink = figure.getByRole('link', { name: /查看 PNG 原图/ });
+  const dialog = page.getByRole('dialog');
+  await openLink.click();
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('img')).toHaveAttribute(
+    'src',
+    new RegExp('pirevit-architecture-png-v3\\.png$'),
+  );
+  await expect(page).toHaveURL(originalUrl);
+  await dialog.getByRole('button', { name: '关闭图片' }).click();
+  await expect(dialog).not.toBeVisible();
+  await expect(openLink).toBeFocused();
+  await figure.locator('.diagram-image-link').click();
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible();
+  await openLink.click();
+  await page.mouse.click(2, 2);
+  await expect(dialog).not.toBeVisible();
+  await expect(page).toHaveURL(originalUrl);
+});
+
+for (const viewport of [
+  { width: 1440, height: 1000 },
+  { width: 390, height: 844 },
+]) {
+  test(`image viewer closes and restores page at ${viewport.width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto('/projects/pirevit/');
+    const trigger = page.locator('.diagram-image-link');
+    await trigger.scrollIntoViewIfNeeded();
+    const scroll = await page.evaluate(() => window.scrollY);
+    await trigger.click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    await dialog.getByRole('button', { name: '关闭图片' }).click();
+    await expect(dialog).not.toBeVisible();
+    expect(await page.evaluate(() => window.scrollY)).toBeCloseTo(scroll, -1);
+    expect(
+      await page.evaluate(() => document.documentElement.style.overflow),
+    ).not.toBe('hidden');
+    await trigger.click();
+    await page.mouse.click(2, 2);
+    await expect(dialog).not.toBeVisible();
+  });
+}

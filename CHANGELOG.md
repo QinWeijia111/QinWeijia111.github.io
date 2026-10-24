@@ -1,5 +1,12 @@
 # Changelog
 
+## PNG architecture viewer — 2026-10-24 — pending human merge
+
+- Replace the PiRevit architecture SVG with the owner-accepted generated PNG, without an invented software UI.
+- Keep image enlargement on the project page using a native dialog, with close button, backdrop dismissal and Escape.
+- Restore keyboard focus and page scrolling after dismissal; keep the PNG download and no-JavaScript fallback.
+- Validate actual PNG bytes, dimensions, browser delivery and desktop/mobile viewer behavior.
+
 ## PR #1 review revision — 2026-10-20 — pending human review
 
 - Raise body/card/meta type sizes; use system fonts and looser Chinese heading spacing.
