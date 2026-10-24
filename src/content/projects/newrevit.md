@@ -95,6 +95,13 @@ crossProject:
   project: pirevit
   heading: 从能力到产品
   description: NewRevit 解决 Agent 如何可靠操作 Revit；PiRevit 进一步解决这些能力如何进入可交互、可观测、可交付的桌面产品。
+architectureDiagrams:
+  - src: /images/newrevit-architecture-v1.png
+    width: 1536
+    height: 1024
+    title: NewRevit 整体架构图
+    alt: NewRevit 高层架构 PNG：Agent 与领域 Skills 通过 MCP 和 WebSocket 连接 C# Revit Add-in，由主线程调度和 Revit API 完成模型操作，并通过连接检查、碰撞检查和工程师复核验证结果。
+    description: Agent 与领域 Skills 负责意图理解和工作流推进；TypeScript MCP Server 提供能力入口，通过 WebSocket 连接 Revit Add-in，由执行后端读取工程环境并进行确定性建模。图中同时展示真实回归与能力交付的关系，不展开私有工具契约、Prompt 或 Skills 原文。
 ---
 
 ## 项目概述

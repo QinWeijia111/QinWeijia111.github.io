@@ -250,3 +250,56 @@ for (const viewport of [
     await expect(dialog).not.toBeVisible();
   });
 }
+
+for (const slug of ['newrevit', 'multica-learning']) {
+  for (const width of [1440, 390]) {
+    test(`${slug} PNG loads and returns from image viewer at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/projects/${slug}/`);
+      const trigger = page.locator('.diagram-image-link');
+      await expect(trigger).toHaveCount(1);
+      const image = trigger.locator('img');
+      await trigger.scrollIntoViewIfNeeded();
+      await expect
+        .poll(() =>
+          image.evaluate(
+            (el: HTMLImageElement) => el.complete && el.naturalWidth === 1536,
+          ),
+        )
+        .toBeTruthy();
+      const src = await image.getAttribute('src');
+      expect(src).toMatch(/\.png$/);
+      expect(
+        (await page.request.get(src!)).headers()['content-type'],
+      ).toContain('image/png');
+      await trigger.click();
+      const dialog = page.getByRole('dialog');
+      await expect(dialog).toBeVisible();
+      await expect(dialog.locator('img')).toHaveAttribute(
+        'src',
+        new RegExp(
+          slug === 'newrevit'
+            ? 'newrevit-architecture-v1'
+            : 'multica-learning-architecture-v1',
+        ),
+      );
+      await dialog.getByRole('button', { name: '关闭图片' }).click();
+      await expect(dialog).not.toBeVisible();
+      await expect(trigger).toBeFocused();
+      await trigger.click();
+      await page.keyboard.press('Escape');
+      await expect(dialog).not.toBeVisible();
+      await trigger.click();
+      await page.mouse.click(2, 2);
+      await expect(dialog).not.toBeVisible();
+      await expect(page).toHaveURL(`/projects/${slug}/`);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= window.innerWidth,
+        ),
+      ).toBeTruthy();
+    });
+  }
+}
