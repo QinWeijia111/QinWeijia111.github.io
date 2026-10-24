@@ -70,3 +70,12 @@ The owner accepted the single PNG2-style generated infographic and requested onl
 Asset: `public/images/pirevit-architecture-png-v3.png`, 1536×1024. SHA-256: `52064d4e9ca82086f5ef65d2d1dbd920d116c904863758105285f6ba442fdd5e`.
 
 Only this selected final PNG is published; reference inputs, intermediate generated variants and local prompt/review files remain outside tracked public assets. Future actual product/model screenshots still require separate review.
+
+## Approved NewRevit and Multica Learning PNGs — 2026-10-24
+
+After local preview, the owner accepted the two diagrams and requested PR submission. Both are generated abstract architecture infographics, not screenshots or customer models. NewRevit shows only high-level Agent/Skills, MCP, transport, Add-in/Revit and regression responsibilities; no private code, tool contracts, Prompt/Skills bodies, internal paths or family names are published. Multica Learning shows evidence-based research, sequential collaboration, human review and publication, with upstream Multica explicitly treated as a research subject.
+
+- `public/images/newrevit-architecture-v1.png`, 1536×1024, SHA-256 `12709668e66ea85d6949649410a7ad0c903d1381ee981d38543f981a03553a98`.
+- `public/images/multica-learning-architecture-v1.png`, 1536×1024, SHA-256 `27224807673f775f22a3089ab1748df32f46342d8af063fee5f73b9aa8a80756`.
+
+Only these selected final files and webpage review captures are included. Private source archives, the reference checkout, local source-analysis notes and intermediate generation variants stay outside tracked/public assets. Existing video and resume boundaries remain unchanged.

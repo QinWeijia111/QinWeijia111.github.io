@@ -1,5 +1,12 @@
 # Changelog
 
+## NewRevit and Multica Learning architecture PNGs — 2026-10-24 — pending human merge
+
+- Add one owner-reviewed PNG architecture diagram to each project detail page.
+- Keep NewRevit at public responsibility boundaries and distinguish Multica Learning's research/content pipeline from upstream Runtime implementation.
+- Reuse the existing dismissible image viewer, PNG download and content-collection metadata.
+- Validate all three project PNG signatures/dimensions and the new pages' desktop/mobile viewer navigation.
+
 ## PNG architecture viewer — 2026-10-24 — pending human merge
 
 - Replace the PiRevit architecture SVG with the owner-accepted generated PNG, without an invented software UI.
