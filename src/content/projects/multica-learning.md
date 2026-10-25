@@ -84,6 +84,13 @@ detailSections:
       - title: Tutorial Writer
       - title: Technical Reviewer
       - title: Human Merge
+architectureDiagrams:
+  - src: /images/multica-learning-architecture-v1.png
+    width: 1536
+    height: 1024
+    title: Multica Learning 架构与协作流程
+    alt: Multica Learning 架构 PNG：固定上游源码版本，经 Source Verification 形成研究与教程产物，再经过技术评审和人工合并发布学习站。下方展示顺序协作角色及 M01 至 M06 研究主题。
+    description: 以固定版本的上游 Multica 源码为研究对象，将源码核验、研究记录、教程、精确提交评审和人工合并连接为知识生产流程，再由 Astro 学习站与 GitHub Pages 交付内容。Learning Squad 按角色顺序交接；M01–M06 是已完成的研究主题，不代表自行实现了上游运行时。
 ---
 
 ## 项目概述
